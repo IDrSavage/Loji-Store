@@ -7,7 +7,7 @@ window.STORE = {
   // رقم واتساب اللي تستقبل عليه الطلبات (بدون + وبدون أصفار في البداية)
   whatsapp: "966576270207",
   // رابط مجموعة الواتساب (chat.whatsapp.com/...) — اتركيه فاضي إذا ما فيه
-  groupLink: "",
+  groupLink: "https://chat.whatsapp.com/BRpNqSlaUYpKSeGw6OEp9T",
   // رابط انستقرام أو تيك توك — اختياري
   instagram: "",
   tiktok: "",

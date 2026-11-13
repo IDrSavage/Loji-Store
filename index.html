@@ -441,6 +441,7 @@
       <div id="contactCol">
         <h4>تواصلي معنا</h4>
         <a id="waFoot" target="_blank" rel="noopener">واتساب</a>
+        <a id="groupFoot" target="_blank" rel="noopener" hidden>مجموعة لوجي على واتساب</a>
       </div>
     </div>
     <div class="copy">© <span id="yr"></span> LOJI · لوجي</div>
@@ -520,7 +521,7 @@
   const waBase = "https://wa.me/" + S.whatsapp;
   $("#waDirect").href = waBase + "?text=" + encodeURIComponent("السلام عليكم، عندي استفسار عن منتجات لوجي");
   $("#waFoot").href = waBase;
-  if (S.groupLink){ const g = $("#groupBtn"); g.href = S.groupLink; g.hidden = false; }
+  if (S.groupLink){ for (const g of [$("#groupBtn"), $("#groupFoot")]) { g.href = S.groupLink; g.hidden = false; } }
   for (const [k, label] of [["instagram","انستقرام"],["tiktok","تيك توك"]]) {
     if (S[k]) { const a = document.createElement("a"); a.href = S[k]; a.target = "_blank"; a.rel = "noopener"; a.textContent = label; $("#contactCol").insertBefore(a, $("#contactCol p")); }
   }
