@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LOJI | لوجي — منتجات سودانية شعبية</title>
-<meta name="description" content="أسرار الجمال السوداني">
+<title>LOJI | لوجي — أسرار الجمال</title>
+<meta name="description" content="أسرار الجمال">
 <meta name="theme-color" content="#fbdbdc">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_SA">
 <meta property="og:title" content="LOJI | لوجي">
-<meta property="og:description" content="أسرار الجمال السوداني">
+<meta property="og:description" content="أسرار الجمال">
 <meta property="og:image" content="img/og.jpg">
 <meta property="og:image:width" content="600">
 <meta property="og:image:height" content="600">
@@ -267,6 +267,13 @@
   .modal .desc{color:var(--brown); margin:12px 0 20px}
   .modal .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
   .modal .x{position:absolute; top:14px; left:14px}
+  .opts-title{margin:0 0 8px; font-weight:500; font-size:15px}
+  .opts{display:grid; gap:8px}
+  .opt{display:flex; align-items:center; justify-content:space-between; gap:10px; background:#fff; border:1px solid var(--line); border-radius:16px; padding:10px 12px}
+  .opt b{display:block; font-weight:500}
+  .opt span{font-size:13px; color:var(--muted)}
+  .opt .add, .opt .stepper{flex:none}
+  .view-cart{margin-top:14px; width:100%}
   @media (min-width: 760px){
     .modal{inset:50% auto auto 50%; transform:translate(-50%,-46%) scale(.96); opacity:0; pointer-events:none; border-radius:28px; width:min(900px, 92vw); transition:transform .25s, opacity .25s}
     .modal.on{transform:translate(-50%,-50%); opacity:1; pointer-events:auto}
@@ -337,7 +344,7 @@
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="LOJI">
       <img src="img/logo-round.png" alt="">
-      <span><b>LOJI</b><small>منتجات سودانية شعبية</small></span>
+      <span><b>LOJI</b><small>أسرار الجمال</small></span>
     </a>
     <nav class="links">
       <a href="#shop">المنتجات</a>
@@ -355,7 +362,7 @@
     <div class="wrap">
       <div>
         <span class="kicker">لوجي</span>
-        <h1>أسرار الجمال<br><em>السوداني</em></h1>
+        <h1><em>أسرار</em> الجمال</h1>
         <p class="lead">من جمال التراث السوداني استلهمنا لوجي، لنقدّم تجربة مختلفة تحمل أصالة الماضي وأناقة الحاضر.</p>
         <p class="lead sub">تفاصيل من ثقافة عريقة، ولمسات جمالية تعكس حكاية تناقلتها الأجيال.</p>
         <div class="cta">
@@ -427,7 +434,7 @@
     <div class="cols">
       <div>
         <div class="logo">LOJI</div>
-        <p>منتجات سودانية شعبية للعناية والعطور.</p>
+        <p>أسرار الجمال.</p>
       </div>
       <div>
         <h4>تسوّقي</h4>
@@ -500,17 +507,40 @@
     get(k){ try { return JSON.parse(localStorage.getItem(k)) } catch { return null } },
     set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)) } catch {} },
   };
+  // a cart key is "productId" or "productId|optionIndex"
+  const info = key => {
+    const [id, oi] = key.split("|"), p = byId[id];
+    if (!p) return null;
+    if (p.options) {
+      const o = p.options[+oi];
+      if (oi == null || !o) return null;
+      return { p, name: `${p.name} (${o.label})`, price: o.price ?? null };
+    }
+    if (oi != null) return null;
+    return { p, name: p.name, price: p.price ?? null };
+  };
   let cart = store.get(KEY) || {};
-  for (const id in cart) if (!byId[id]) delete cart[id];
+  for (const k in cart) if (!info(k)) delete cart[k];
   let cat = "all";
 
   const money = n => n.toLocaleString("en-US") + " " + S.currency;
-  const priceHTML = p => p.price != null ? `${p.price}<small>${S.currency}</small>` : `<small>السعر عند الطلب</small>`;
-  const qty = id => cart[id] || 0;
+  const priceOf = p => {
+    if (!p.options) return p.price;
+    const ps = p.options.map(o => o.price).filter(x => x != null);
+    return ps.length ? Math.min(...ps) : null;
+  };
+  const priceHTML = p => {
+    const v = priceOf(p);
+    if (v == null) return `<small>السعر عند الطلب</small>`;
+    const from = p.options && new Set(p.options.map(o => o.price)).size > 1;
+    return `${from ? "<small>من </small>" : ""}${v}<small>${S.currency}</small>`;
+  };
+  const qty = key => cart[key] || 0;
+  const qtyOfProduct = id => Object.entries(cart).reduce((a,[k,q]) => a + (k.split("|")[0] === id ? q : 0), 0);
   const items = () => Object.entries(cart).filter(([,q]) => q > 0);
   const totalQty = () => items().reduce((a,[,q]) => a + q, 0);
-  const subtotal = () => items().reduce((a,[id,q]) => a + (byId[id].price || 0) * q, 0);
-  const hasUnpriced = () => items().some(([id]) => byId[id].price == null);
+  const subtotal = () => items().reduce((a,[k,q]) => a + (info(k).price || 0) * q, 0);
+  const hasUnpriced = () => items().some(([k]) => info(k).price == null);
 
   // static bits
   $("#yr").textContent = new Date().getFullYear();
@@ -532,12 +562,20 @@
     renderGrid();
   });
 
-  const control = (p, cls="") => {
-    if (p.available === false) return `<span class="soldout">نفدت الكمية</span>`;
-    const q = qty(p.id);
+  const stepper = key => {
+    const q = qty(key);
     return q
-      ? `<span class="stepper ${cls}"><button data-inc="${p.id}" aria-label="زيادة">+</button><span>${q}</span><button data-dec="${p.id}" aria-label="إنقاص">−</button></span>`
-      : `<button class="add ${cls}" data-inc="${p.id}"><svg><use href="#i-plus"/></svg>أضيفي للسلة</button>`;
+      ? `<span class="stepper"><button data-inc="${key}" aria-label="زيادة">+</button><span>${q}</span><button data-dec="${key}" aria-label="إنقاص">−</button></span>`
+      : `<button class="add" data-inc="${key}"><svg><use href="#i-plus"/></svg>أضيفي للسلة</button>`;
+  };
+  // control shown on the product card
+  const control = p => {
+    if (p.available === false) return `<span class="soldout">نفدت الكمية</span>`;
+    if (p.options) {
+      const n = qtyOfProduct(p.id);
+      return `<button class="add" data-open="${p.id}">${n ? `في السلة (${n})` : `اختاري ${p.optionsTitle || "النوع"}`}</button>`;
+    }
+    return stepper(p.id);
   };
 
   function renderGrid(){
@@ -557,11 +595,11 @@
 
   function renderCart(){
     const list = items();
-    $("#lines").innerHTML = list.length ? list.map(([id,q]) => { const p = byId[id]; return `
+    $("#lines").innerHTML = list.length ? list.map(([k,q]) => { const it = info(k); return `
       <div class="line">
-        <img src="${p.img}" alt="">
-        <div><b>${p.name}</b><span>${p.price != null ? money(p.price) : "السعر عند الطلب"}</span></div>
-        <span class="stepper"><button data-inc="${id}" aria-label="زيادة">+</button><span>${q}</span><button data-dec="${id}" aria-label="إنقاص">−</button></span>
+        <img src="${it.p.img}" alt="">
+        <div><b>${it.name}</b><span>${it.price != null ? money(it.price) : "السعر عند الطلب"}</span></div>
+        <span class="stepper"><button data-inc="${k}" aria-label="زيادة">+</button><span>${q}</span><button data-dec="${k}" aria-label="إنقاص">−</button></span>
       </div>`}).join("")
       : `<div class="empty"><img src="img/logo-mark.png" alt=""><p>سلتك فاضية</p><button class="btn btn-ghost" data-close>تصفّحي المنتجات</button></div>`;
     $("#orderForm").style.display = list.length ? "" : "none";
@@ -587,7 +625,12 @@
           <h3>${p.name}</h3>
           <div class="price">${priceHTML(p)}</div>
           <p class="desc">${p.desc || p.short || ""}</p>
-          <div class="row">${control(p)}${qty(id) ? `<button class="btn btn-dark" data-cart>عرض السلة</button>` : ""}</div>
+          ${p.available === false ? `<span class="soldout">نفدت الكمية</span>` : p.options ? `
+          <h4 class="opts-title">اختاري ${p.optionsTitle || "النوع"}</h4>
+          <div class="opts">${p.options.map((o, i) => `
+            <div class="opt"><div><b>${o.label}</b><span>${o.price != null ? money(o.price) : "السعر عند الطلب"}</span></div>${stepper(`${id}|${i}`)}</div>`).join("")}
+          </div>` : `<div class="row">${stepper(id)}</div>`}
+          ${qtyOfProduct(id) ? `<button class="btn btn-dark view-cart" data-cart>عرض السلة</button>` : ""}
         </div>
       </div>`;
   }
@@ -599,7 +642,7 @@
     const before = qty(id);
     cart[id] = Math.max(0, before + d);
     if (!cart[id]) delete cart[id];
-    if (d > 0 && before === 0) toast(`أُضيف «${byId[id].name}» للسلة`);
+    if (d > 0 && before === 0) toast(`أُضيف «${info(id).name}» للسلة`);
     refresh();
   }
 
@@ -648,16 +691,16 @@
     if (!f.district?.trim()) return err.textContent = "اكتبي اسم الحي", form.elements.district.focus();
     err.textContent = "";
 
-    const lines = items().map(([id,q]) => {
-      const p = byId[id];
-      return `• ${p.name} × ${q}` + (p.price != null ? ` = ${p.price * q} ${S.currency}` : "");
+    const lines = items().map(([k,q]) => {
+      const it = info(k);
+      return `• ${it.name} × ${q}` + (it.price != null ? ` = ${it.price * q} ${S.currency}` : "");
     });
     const sub = subtotal(), fee = S.deliveryFee;
     const orderNo = L.newOrderNo();
     const order = {
       n: orderNo, t: Date.now(), f: fee,
       c: { name: f.name.trim(), phone, city: f.city.trim(), district: f.district.trim(), address: (f.address || "").trim() },
-      i: items().map(([id,q]) => [byId[id].name, q, byId[id].price ?? null]),
+      i: items().map(([k,q]) => [info(k).name, q, info(k).price]),
       notes: (f.notes || "").trim(),
     };
     const msg = [

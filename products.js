@@ -21,7 +21,10 @@ window.STORE = {
 
 /* =========================================================
    المنتجات
-   price: السعر بالريال (الأسعار الحالية مؤقتة — غيّريها)
+   price: السعر بالريال
+   options: (اختياري) أنواع أو أحجام المنتج، ولكل واحد سعره
+            مثال: options: [{ label: "صغير", price: 15 }, { label: "كبير", price: 35 }]
+            إذا فيه options، السعر يُأخذ منها ويتجاهل price
    category: dilka | body | scent
    badge: كلمة صغيرة تظهر على الصورة (اختياري)
    available: false يخفي زر الإضافة ويكتب "نفدت الكمية"
@@ -38,7 +41,7 @@ window.PRODUCTS = [
     id: "dilka-sudani",
     name: "دلكة سودانية",
     category: "dilka",
-    price: 45, // مؤقت
+    price: 40,
     img: "img/dilka-sudani.jpg",
     badge: "الأكثر طلبًا",
     short: "الدلكة الأصلية بريحتها المعروفة",
@@ -49,7 +52,7 @@ window.PRODUCTS = [
     id: "dilka-white",
     name: "دلكة بيضاء",
     category: "dilka",
-    price: 50, // مؤقت
+    price: 40,
     img: "img/dilka-white.jpg",
     badge: "فيتامين C",
     short: "مدعّمة بفيتامين C لنضارة البشرة",
@@ -60,7 +63,7 @@ window.PRODUCTS = [
     id: "dilka-oil",
     name: "زيت دلكة",
     category: "dilka",
-    price: 35, // مؤقت
+    price: 15,
     img: "img/dilka-oil.jpg",
     short: "رفيق الدلكة، يرطّب ويعطّر",
     desc: "زيت يُدهن به الجسم قبل الدلكة عشان تمشي بسهولة، ويترك البشرة مرطّبة وريحتها حلوة.",
@@ -70,18 +73,22 @@ window.PRODUCTS = [
     id: "khumra",
     name: "خُمرة",
     category: "scent",
-    price: 40, // مؤقت
+    optionsTitle: "الحجم",
+    options: [
+      { label: "الحجم الصغير", price: 15 },
+      { label: "الحجم الكبير", price: 35 },
+    ],
     img: "img/khumra.jpg",
     badge: "جسم وشعر",
-    short: "عطر سوداني تقليدي للجسم والشعر",
-    desc: "الخُمرة السودانية، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
+    short: "عطر تقليدي للجسم والشعر",
+    desc: "الخُمرة، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
     available: true,
   },
   {
     id: "musk-powder",
     name: "بودرة مسك",
     category: "scent",
-    price: 30, // مؤقت
+    price: 15,
     img: "img/musk-powder.jpg",
     short: "بودرة ناعمة بريحة المسك",
     desc: "بودرة جسم ناعمة بريحة المسك، تعطي إحساس بالانتعاش والنظافة.",
@@ -91,7 +98,7 @@ window.PRODUCTS = [
     id: "silk-cream",
     name: "كريم حرير",
     category: "body",
-    price: 40, // مؤقت
+    price: 35,
     img: "img/silk-cream.jpg",
     short: "كريم مرطّب بزبدة الشيا والزيوت الطبيعية",
     desc: "كريم مرطّب بزبدة الشيا والزيوت الطبيعية، يخلّي البشرة ناعمة مثل الحرير.",
@@ -101,7 +108,7 @@ window.PRODUCTS = [
     id: "african-soap",
     name: "الصابونة الأفريقية",
     category: "body",
-    price: 30, // مؤقت
+    price: 35,
     img: "img/african-soap.jpg",
     short: "بالأعشاب والزيوت الطبيعية",
     desc: "صابونة أفريقية بالأعشاب والزيوت الطبيعية، تنظّف البشرة بعمق وبلطف.",
@@ -111,10 +118,16 @@ window.PRODUCTS = [
     id: "body-scrub",
     name: "مقشّر للجسم",
     category: "body",
-    price: 40, // مؤقت
+    optionsTitle: "النوع",
+    options: [
+      { label: "النيلة", price: 35 },
+      { label: "القهوة", price: 35 },
+      { label: "الكركديه", price: 35 },
+    ],
     img: "img/body-scrub.jpg",
-    short: "يزيل الجلد الميت ويجدد النعومة",
-    desc: "مقشّر للجسم يزيل الجلد الميت ويخلّي البشرة ناعمة وجاهزة للترطيب.",
+    badge: "3 أنواع",
+    short: "بالنيلة أو القهوة أو الكركديه",
+    desc: "مقشّر للجسم يزيل الجلد الميت ويخلّي البشرة ناعمة وجاهزة للترطيب. متوفر بثلاثة أنواع: النيلة، القهوة، والكركديه.",
     available: true,
   },
 ];
