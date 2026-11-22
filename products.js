@@ -71,7 +71,7 @@ window.PRODUCTS = [
   },
   {
     id: "khumra",
-    name: "خُمرة",
+    name: "خُمريّة",
     category: "scent",
     optionsTitle: "الحجم",
     options: [
@@ -81,7 +81,7 @@ window.PRODUCTS = [
     img: "img/khumra.jpg",
     badge: "جسم وشعر",
     short: "عطر تقليدي للجسم والشعر",
-    desc: "الخُمرة، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
+    desc: "الخُمريّة، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
     available: true,
   },
   {
@@ -98,7 +98,7 @@ window.PRODUCTS = [
     id: "silk-cream",
     name: "كريم حرير",
     category: "body",
-    price: 35,
+    price: 40,
     img: "img/silk-cream.jpg",
     short: "كريم مرطّب بزبدة الشيا والزيوت الطبيعية",
     desc: "كريم مرطّب بزبدة الشيا والزيوت الطبيعية، يخلّي البشرة ناعمة مثل الحرير.",
