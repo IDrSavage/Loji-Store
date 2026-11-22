@@ -71,7 +71,7 @@ window.PRODUCTS = [
   },
   {
     id: "khumra",
-    name: "خُمريّة",
+    name: "خمرية",
     category: "scent",
     optionsTitle: "الحجم",
     options: [
@@ -81,7 +81,7 @@ window.PRODUCTS = [
     img: "img/khumra.jpg",
     badge: "جسم وشعر",
     short: "عطر تقليدي للجسم والشعر",
-    desc: "الخُمريّة، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
+    desc: "الخمرية، خلطة عطرية تقليدية تُستخدم على الجسم والشعر، وريحتها تثبت طول اليوم.",
     available: true,
   },
   {
